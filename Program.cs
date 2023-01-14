@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ex_06_P3;
+using System;
 
 namespace TicTacToe
 {
@@ -6,6 +7,10 @@ namespace TicTacToe
     {
         static void Main(string[] args)
         {
+            //Create two players
+            HumanPlayer p1 = new HumanPlayer() { Name = "Konrad", Symbol = 'x' };
+            ComputerPlayer p2 = new ComputerPlayer() { Name = "AI", Symbol = 'o' };
+
             char[,] startBoard =
             {
                 {'1','2','3'},
@@ -18,7 +23,7 @@ namespace TicTacToe
             bool player2Won = false;
             bool nextIsPlayer1 = true;
 
-            //////////////////////////////////////////////
+            /**************************************/
 
             // Loop over rounds
             for (int round = 0; round < gameBoard.Length; round++)
@@ -27,19 +32,21 @@ namespace TicTacToe
                 Draw(gameBoard);
                 if (nextIsPlayer1)
                 {
-                    // TODO: player 1 move
+                    Console.WriteLine(p1.Name + " move");
+                    player1Won = p1.MakeMove(startBoard, gameBoard);
                     nextIsPlayer1 = false;
                 }
                 else
                 {
-                    // TODO: player 2 move
+                    Console.WriteLine(p2.Name + " move");
+                    player2Won = p2.MakeMove(startBoard, gameBoard);
                     nextIsPlayer1 = true;
                 }
                 if (player1Won || player2Won)
                     break;
             }
 
-           ///////////////////////////////////////////////
+            /**************************************/
 
             //End the game
             Console.Clear();
@@ -57,6 +64,5 @@ namespace TicTacToe
                  Console.WriteLine();
             }
         }
-
     }
 }
