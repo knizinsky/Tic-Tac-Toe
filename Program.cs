@@ -1,29 +1,25 @@
-﻿using Ex_06_P3;
-using System;
+﻿using System;
 
-namespace TicTacToe
+namespace Ex_07_P4
 {
     class Program
     {
         static void Main(string[] args)
         {
-            //Create two players
-            HumanPlayer p1 = new HumanPlayer() { Name = "Konrad", Symbol = 'x' };
+            // Create two players
+            HumanPlayer p1 = new HumanPlayer() { Name = "Player1", Symbol = 'x' };
             ComputerPlayer p2 = new ComputerPlayer() { Name = "AI", Symbol = 'o' };
-
-            char[,] startBoard =
-            {
-                {'1','2','3'},
-                {'4','5','6'},
-                {'7','8','9'}
+            // Create two boards - with starting and with current fields
+            char[,] startBoard = {
+                { '1', '2', '3' },
+                { '4', '5', '6' },
+                { '7', '8', '9' }
             };
             char[,] gameBoard = startBoard.Clone() as char[,];
-
+            // Flags
             bool player1Won = false;
             bool player2Won = false;
-            bool nextIsPlayer1 = true;
-
-            /**************************************/
+            bool nextIsPlayer1 = true; // true - player 1 move, false - player 2 move
 
             // Loop over rounds
             for (int round = 0; round < gameBoard.Length; round++)
@@ -46,22 +42,25 @@ namespace TicTacToe
                     break;
             }
 
-            /**************************************/
-
-            //End the game
+            // End the game
             Console.Clear();
             Draw(gameBoard);
             Console.Write("Game ended! ");
-            // TODO: print who won
-
+            if (player1Won)
+                Console.WriteLine("Winner: " + p1.Name);
+            else if (player2Won)
+                Console.WriteLine("Winner: " + p2.Name);
+            else
+                Console.WriteLine("A tie!");
         }
+
         static void Draw(char[,] board)
         {
             for (int i = 0; i < board.GetLength(0); i++)
             {
-                 for (int j = 0; j < board.GetLength(1); j++)
-                 Console.Write(board[i, j]);
-                 Console.WriteLine();
+                for (int j = 0; j < board.GetLength(1); j++)
+                    Console.Write(board[i, j]);
+                Console.WriteLine();
             }
         }
     }

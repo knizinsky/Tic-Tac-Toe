@@ -1,12 +1,13 @@
 ﻿using System;
-namespace Ex_06_P3
+using System.Threading; // for Thread.Sleep
+
+namespace Ex_07_P4
 {
     interface IMoving
     {
         bool MakeMove(char[,] startBoard, char[,] gameBoard);
     }
 
-    /**********************************************************************/
     abstract class Player
     {
         public string Name { get; set; }
@@ -16,7 +17,7 @@ namespace Ex_06_P3
             int height = gameBoard.GetLength(0);
             int width = gameBoard.GetLength(1);
             if (height != width)
-                throw new Exception("The board is not square!");
+                throw new Exception("The board is not a square!");
             // Check rows
             for (int i = 0; i < height; i++)
             {
@@ -56,26 +57,56 @@ namespace Ex_06_P3
             // Otherwise, no win yet
             return false;
         }
+        public bool PlaceSymbol(char c, char[,] startBoard, char[,] gameBoard)
+        {
+            int height = gameBoard.GetLength(0);
+            int width = gameBoard.GetLength(1);
+            if (height != startBoard.GetLength(0) || width != startBoard.GetLength(1))
+                throw new Exception("The boards have different sizes!");
+            // Try to put player's symbol at a given place, if the place is available
+            for (int i = 0; i < height; i++)
+                for (int j = 0; j < width; j++)
+                    if (gameBoard[i, j] == c && gameBoard[i, j] == startBoard[i, j])
+                    {
+                        gameBoard[i, j] = Symbol;
+                        return true;
+                    }
+            // Otherwise, return without success
+            return false;
+        }
     }
-
-    /**********************************************************************/
 
     class HumanPlayer : Player, IMoving
     {
         public bool MakeMove(char[,] startBoard, char[,] gameBoard)
         {
-            // TODO: human move
+            // Ask human player to enter a place until (s)he picks an available one
+            char chosenPlace;
+            do
+            {
+                Console.Write("Choose an empty place: ");
+                chosenPlace = Console.ReadKey().KeyChar;
+                Console.WriteLine();
+            }
+            while (!PlaceSymbol(chosenPlace, startBoard, gameBoard));
             return CheckIfPlayerWon(gameBoard);
         }
     }
-
-    /**********************************************************************/
 
     class ComputerPlayer : Player, IMoving
     {
         public bool MakeMove(char[,] startBoard, char[,] gameBoard)
         {
-            // TODO: computer move
+            // Draw random numbers until AI player picks an available one
+            Random rnd = new Random();
+            char chosenPlace;
+            do
+            {
+                int p = rnd.Next(1, gameBoard.Length + 1); // random 1-9
+                chosenPlace = p.ToString()[0]; // convert digit to char
+            }
+            while (!PlaceSymbol(chosenPlace, startBoard, gameBoard));
+            Thread.Sleep(2000); // wait 2 seconds
             return CheckIfPlayerWon(gameBoard);
         }
     }
